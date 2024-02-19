@@ -1,0 +1,105 @@
+% Importar el paquete de base de datos
+pkg load database;
+
+conn = pq_connect(setdbopts('dbname', 'REPASO1P', 'host', 'localhost', 'port', '5432', 'user', 'postgres', 'password', 'centenario'));
+
+% Mensaje de bienvenida
+disp('Bienvenido al juego de preguntas y respuestas.');
+
+% Bucle principal del programa
+while true
+    % Mostrar el menú
+    disp('1. Jugar');
+    disp('2. Instrucciones');
+    disp('3. Ver preguntas');
+    disp('4. Salir');
+    
+    % Obtener la opción del usuario
+    opcion = input('Por favor, seleccione una opción: ');
+    
+    % Ejecutar la opción seleccionada
+    switch opcion
+        case 1
+            % Inicializar puntaje y vidas
+            puntaje = 0;
+            vidas = 3;
+            
+            % Obtener preguntas de la base de datos
+            query = 'SELECT pregunta, respuesta FROM preguntas';
+            result = pgsql(conn, query);
+            
+            % Iterar sobre las preguntas
+            for i = 1:length(result.data)
+                pregunta = result.data{i}{1};
+                respuesta = result.data{i}{2};
+                
+                % Mostrar la pregunta y puntaje actual
+                disp(['Pregunta ', num2str(i), ': ', pregunta]);
+                disp(['Puntaje actual: ', num2str(puntaje)]);
+                
+                % Solicitar respuesta al usuario
+                respuesta_usuario = input('Ingrese su respuesta: ', 's');
+                
+                % Verificar si la respuesta es correcta
+                if strcmpi(respuesta_usuario, respuesta)
+                    disp('Respuesta correcta.');
+                    puntaje = puntaje + 1;
+                else
+                    disp('Respuesta incorrecta.');
+                    vidas = vidas - 1;
+                    disp(['Vidas restantes: ', num2str(vidas)]);
+                end
+                
+                % Salir del bucle si el usuario se queda sin vidas
+                if vidas == 0
+                    disp('Has perdido todas tus vidas. Juego terminado.');
+                    break;
+                end
+            end
+            
+            % Mostrar puntaje final
+            disp(['Tu puntaje final es: ', num2str(puntaje)]);
+            
+        case 2
+            % Mostrar instrucciones
+            disp('Instrucciones:');
+            disp('Deberás responder a cada pregunta correctamente para ganar puntos.');
+            disp('Cada respuesta correcta te otorgará un punto.');
+            disp('Tienes inicialmente 3 vidas. Cada respuesta incorrecta te quitará una vida.');
+            disp('El juego termina cuando respondas 5 preguntas o pierdas todas tus vidas.');
+            
+        case 3
+            % Mostrar las preguntas almacenadas en la base de datos
+            query = 'SELECT pregunta FROM preguntas';
+            result = pgsql(conn, query);
+            disp('Preguntas almacenadas:');
+            for i = 1:length(result.data)
+                disp([num2str(i), '. ', result.data{i}{1}]);
+            end
+            
+        case 4
+            % Salir del programa
+            disp('Gracias por jugar. Hasta luego.');
+            pgsql('close', conn);
+            return;
+            
+        otherwise
+            disp('Opción no válida. Por favor, seleccione una opción válida.');
+    end
+end
+_______________________________________________________________________________________________________________________________________________________________________
+
+--Creación Tabla contenedora de preguntas
+Create Table Preguntas7(
+	pregunta varchar(850),
+	respuesta varchar(850)
+);
+
+--Insertar datos a la tabla.
+
+INSERT INTO Preguntas7 VALUES('Cual es la capital de Belgica','Bruselas')
+
+--Mostrar los datos introducidos en la tabla
+
+Select*From Preguntas7
+

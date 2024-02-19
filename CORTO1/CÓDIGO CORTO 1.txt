@@ -1,0 +1,72 @@
+import os
+
+def calcular_IMC(peso, altura):
+    return peso / altura**2
+
+def clasificar_IMC(IMC):
+    if IMC < 18.5:
+        return "Bajo peso"
+    elif 18.5 <= IMC < 24.9:
+        return "Peso normal"
+    else:
+        return "Sobre peso"
+
+def guardar_informacion(nombre, peso, altura):
+    IMC = calcular_IMC(peso, altura)
+    categoria = clasificar_IMC(IMC)
+
+    with open("IMC.txt", "a") as file:
+        file.write(f"{nombre},{peso},{altura},{IMC:.2f},{categoria}\n")
+
+def leer_informacion():
+    try:
+        with open("IMC.txt", "r") as file:
+            print("Información almacenada en el archivo:")
+            for line in file:
+                print(line.strip())
+    except FileNotFoundError:
+        print("No se encontró el archivo de información.")
+
+def eliminar_informacion():
+    try:
+        os.remove("IMC.txt")
+        print("Información eliminada exitosamente.")
+    except FileNotFoundError:
+        print("No se encontró el archivo de información.")
+
+def menu():
+    while True:
+        print("\nMenú:")
+        print("1. Calcular IMC")
+        print("2. Leer información del archivo")
+        print("3. Eliminar información del archivo")
+        print("4. Salir")
+
+        opcion = input("Seleccione una opción (1-4): ")
+
+        if opcion == "1":
+            nombre = input("Ingrese su nombre: ")
+            peso = float(input("Ingrese su peso en kilogramos: "))
+            altura = float(input("Ingrese su altura en metros: "))
+            IMC = calcular_IMC(peso, altura)
+            categoria = clasificar_IMC(IMC)
+
+            print(f"Su IMC es: {IMC:.2f}")
+            print(f"Categoría: {categoria}")
+            guardar_informacion(nombre, peso, altura)
+
+        elif opcion == "2":
+            leer_informacion()
+
+        elif opcion == "3":
+            eliminar_informacion()
+
+        elif opcion == "4":
+            print("¡Hasta luego!")
+            break
+
+        else:
+            print("Opción inválida. Por favor, seleccione una opción válida.")
+
+if __name__ == "__main__":
+    menu()

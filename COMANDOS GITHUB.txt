@@ -1,0 +1,14 @@
+echo "# EJEMPLOSGIT" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/EdgarFranco8/EJEMPLOSGIT.git
+git push -u origin main
+
+
+git remote add origin https://github.com/EdgarFranco8/EJEMPLOSGIT.git
+git branch -M main
+git push -u origin main
+
+A partir del minuto 12:46 se explica como obtener el codigo previamente compartido en Github

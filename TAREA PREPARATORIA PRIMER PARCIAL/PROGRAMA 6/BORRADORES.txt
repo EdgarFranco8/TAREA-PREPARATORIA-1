@@ -1,0 +1,251 @@
+% Conexión a la base de datos PostgreSQL
+conn = database("nombre_basedatos", "usuario", "contraseña", "org.postgresql.Driver", "jdbc:postgresql://localhost:5432/nombre_basedatos");
+
+if ~isconnection(conn)
+    disp("Error al conectar con la base de datos");
+    return;
+end
+
+% Menú principal
+opcion = 0;
+while opcion ~= 4
+    disp("Menú:");
+    disp("1. Desplegar el listado de canciones");
+    disp("2. Buscar por artista");
+    disp("3. Buscar por canción");
+    disp("4. Salir");
+    
+    opcion = input("Seleccione una opción: ");
+    
+    switch opcion
+        case 1
+            % Desplegar el listado de canciones
+            sqlQuery = "SELECT * FROM canciones";
+            data = fetch(conn, sqlQuery);
+            disp(data);
+            
+        case 2
+            % Buscar por artista
+            artista = input("Ingrese el nombre del artista: ", 's');
+            sqlQuery = sprintf("SELECT * FROM canciones WHERE artista = '%s'", artista);
+            data = fetch(conn, sqlQuery);
+            disp(data);
+            
+        case 3
+            % Buscar por canción
+            cancion = input("Ingrese el nombre de la canción: ", 's');
+            sqlQuery = sprintf("SELECT * FROM canciones WHERE cancion = '%s'", cancion);
+            data = fetch(conn, sqlQuery);
+            disp(data);
+            
+        case 4
+            disp("Saliendo del programa...");
+            % Cerrar la conexión con la base de datos
+            close(conn);
+            break;
+            
+        otherwise
+            disp("Opción no válida. Inténtelo de nuevo.");
+    end
+end
+
+_______________________________________________________________________________________________________________________________________________________________________
+
+--Creación de Tabla almacenadora de canciones
+
+CREATE TABLE LisCanciones (
+    artista varchar(300),
+	cancion varchar(300)
+);
+
+
+--Insertar datospersonales a la tabla
+
+INSERT INTO LisCanciones VALUES ('Babasonicos','Risa')
+
+--Ver datos ingresados en la tabla
+
+Select*from LisCanciones
+
+_______________________________________________________________________________________________________________________________________________________________________
+
+pkg load database
+
+% Conexión a la base de datos PostgreSQL
+conn = pq_connect(setdbopts('dbname', 'REPASO1P', 'host', 'localhost', 'port', '5432', 'user', 'postgres', 'password', 'centenario'));
+
+if ~isconnection(conn)
+    disp("Error al conectar con la base de datos");
+    return;
+end
+
+% Menú principal
+opcion = 0;
+while opcion ~= 4
+    disp("Menú:");
+    disp("1. Desplegar el listado de canciones");
+    disp("2. Buscar por artista");
+    disp("3. Buscar por canción");
+    disp("4. Salir");
+
+    opcion = input("Seleccione una opción: ");
+
+    switch opcion
+        case 1
+            % Desplegar el listado de canciones
+            sqlQuery = "SELECT * FROM canciones";
+            data = fetch(conn, sqlQuery);
+            disp(data);
+
+        case 2
+            % Buscar por artista
+            artista = input("Ingrese el nombre del artista: ", 's');
+            sqlQuery = sprintf("SELECT * FROM canciones WHERE artista = '%s'", artista);
+            data = fetch(conn, sqlQuery);
+            disp(data);
+
+        case 3
+            % Buscar por canción
+            cancion = input("Ingrese el nombre de la canción: ", 's');
+            sqlQuery = sprintf("SELECT * FROM canciones WHERE cancion = '%s'", cancion);
+            data = fetch(conn, sqlQuery);
+            disp(data);
+
+        case 4
+            disp("Saliendo del programa...");
+            % Cerrar la conexión con la base de datos
+            close(conn);
+            break;
+
+        otherwise
+            disp("Opción no válida. Inténtelo de nuevo.");
+    end
+end
+_______________________________________________________________________________________________________________________________________________________________________
+
+pkg load database
+
+% Establecer la conexión a la base de datos
+conn = pq_connect(setdbopts('dbname', 'REPASO1P', 'host', 'localhost', 'port', '5432', 'user', 'postgres', 'password', 'centenario'));
+
+while true
+    % Mostrar menú
+    disp("1. Desplegar el listado de canciones.");
+    disp("2. Buscar por artista.");
+    disp("3. Buscar por cancion");
+    disp("4. Salir");
+
+     % Solicitar opción al usuario
+    opcion = input("Seleccione una opción: ");
+
+    switch opcion
+      case 1
+        %Desplegar el listado de canciones
+        select_all_query = "SELECT * FROM LisCanciones";
+        result = pq_exec_params(conn, select_all_query);
+
+            disp("Listado de canciones:");
+            disp(result.data);
+
+      case 2
+            %Buscar por artista
+            artista = input("Ingrese el nombre del artista: ", 's');
+            select_query = sprintf("SELECT * FROM LisCanciones WHERE artista = '%s'", artista);
+
+            disp("Artista:");
+            disp(result.data);
+      case 3
+            %Buscar por cancion
+            cancion = input("Ingrese el nombre de la cancion: ", 's');
+            select_query = sprintf("SELECT * FROM LisCanciones WHERE cancion = '%s'", cancion);
+
+            disp("Cancion:");
+            disp(result.data);
+
+      case 4
+            % Salir del programa
+            pq_close(conn);
+            disp("¡Hasta luego!");
+            return;
+
+        otherwise
+            disp("Opción no válida. Por favor, seleccione una opción válida.");
+
+    end
+end
+______________________________________________________________________________________________________________________________________________________________________
+
+
+pkg load database
+
+% Establecer la conexión a la base de datos
+conn = pq_connect(setdbopts('dbname', 'REPASO1P', 'host', 'localhost', 'port', '5432', 'user', 'postgres', 'password', 'centenario'));
+
+
+while true
+    % Mostrar menú
+    disp("1. Desplegar el listado de canciones.");
+    disp("2. Buscar por artista.");
+    disp("3. Buscar por cancion");
+    disp("4. Salir");
+
+     % Solicitar opción al usuario
+    opcion = input("Seleccione una opción: ");
+
+    switch opcion
+      case 1
+        %Desplegar el listado de canciones
+        select_all_query = "SELECT * FROM LisCanciones";
+        result = pq_exec_params(conn, select_all_query);
+
+            disp("Listado de canciones:");
+            disp(result.data);
+
+      case 2
+        % Buscar por artista
+        artista = input("Ingrese el nombre del artista: ", 's');
+        select_query = sprintf("SELECT * FROM LisCanciones WHERE artista = '%s'", artista);
+
+        % Ejecutar la consulta SQL
+        result = pq_exec_params(conn, select_query);
+
+        % Verificar si se encontraron resultados
+        if isempty(result.data)
+        disp("No se encontraron canciones para el artista especificado.");
+    else
+        % Mostrar las canciones del artista
+        disp("Canciones del artista:");
+        disp(result.data);
+    end
+
+
+      case 3
+        % Buscar por artista
+        cancion = input("Ingrese el nombre de la cancion: ", 's');
+        select_query = sprintf("SELECT * FROM LisCanciones WHERE cancion = '%s'", cancion);
+
+        % Ejecutar la consulta SQL
+        result = pq_exec_params(conn, select_query);
+
+        % Verificar si se encontraron resultados
+        if isempty(result.data)
+        disp("No se encontraron canciones para el artista especificado.");
+    else
+        % Mostrar las canciones del artista
+        disp("Canciones del artista:");
+        disp(result.data);
+    end
+
+      case 4
+            % Salir del programa
+            pq_close(conn);
+            disp("¡Hasta luego!");
+            return;
+
+        otherwise
+            disp("Opción no válida. Por favor, seleccione una opción válida.");
+
+    end
+end
+
+
